@@ -1,15 +1,18 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from '../../redux/contacts/contact-actions';
+import { getContacts } from '../../redux/contacts/contacts-selector';
 import s from './Form.module.css';
 
 function Form() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
 
   const handleChange = event => {
     const { name, value } = event.currentTarget;
+
     switch (name) {
       case 'name':
         setName(value);
@@ -22,8 +25,18 @@ function Form() {
     }
   };
 
+  const checkRepeatName = name => {
+    return contacts.find(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+  };
+
   const handleSubmit = event => {
     event.preventDefault();
+    if (checkRepeatName(name)) {
+      alert(`${name} is already in contacts.`);
+    }
+
     dispatch(addContact({ name, number }));
     setName('');
     setNumber('');
