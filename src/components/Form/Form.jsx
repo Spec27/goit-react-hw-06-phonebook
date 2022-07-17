@@ -35,8 +35,6 @@ function Form() {
     event.preventDefault();
     if (checkRepeatName(name)) {
       alert(`${name} is already in contacts.`);
-      setName('');
-      setNumber('');
       return;
     }
 
